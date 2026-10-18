@@ -7,7 +7,7 @@
 <body>
     <h2>Tambah Buku</h2>
     <?php require __DIR__ . '/pesan.php'; ?>
-<a href="index.php?page=buku&action=create">Tambah Buku</a>
+
 
     <form method="post" action="index.php?page=buku&action=store">
         <label>ISBN</label><br>

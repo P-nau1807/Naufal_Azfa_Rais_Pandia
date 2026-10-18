@@ -19,7 +19,7 @@ $buku = $buku ?? [
 <body>
     <h2>Edit Buku</h2>
     <?php require __DIR__ . '/pesan.php'; ?>
-<a href="index.php?page=buku&action=create">Tambah Buku</a>
+
 
     <form method="post" action="index.php?page=buku&action=update">
         <input type="hidden" name="id" value="<?= (int) $buku['id'] ?>">
