@@ -6,6 +6,7 @@
 </head>
 <body>
     <h2>Daftar Buku</h2>
+    <?php require __DIR__ . '/pesan.php'; ?>
     <a href="index.php?page=buku&action=create">Tambah Buku</a>
     <br><br>
 
@@ -19,7 +20,7 @@
             <th>Stok</th>
             <th>Aksi</th>
         </tr>
-        <?php foreach ($daftarBuku as $b): ?>
+        <?php foreach ($daftarBuku ?? [] as $b): ?>
         <tr>
             <td><?= htmlspecialchars($b['isbn']) ?></td>
             <td><?= htmlspecialchars($b['judul']) ?></td>

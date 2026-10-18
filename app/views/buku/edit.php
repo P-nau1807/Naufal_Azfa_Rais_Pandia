@@ -1,3 +1,15 @@
+<?php
+$buku = $buku ?? [
+    'id' => 0,
+    'isbn' => '',
+    'judul' => '',
+    'penulis' => '',
+    'penerbit' => '',
+    'tahun_terbit' => 0,
+    'stok' => 0,
+];
+?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -6,6 +18,8 @@
 </head>
 <body>
     <h2>Edit Buku</h2>
+    <?php require __DIR__ . '/pesan.php'; ?>
+<a href="index.php?page=buku&action=create">Tambah Buku</a>
 
     <form method="post" action="index.php?page=buku&action=update">
         <input type="hidden" name="id" value="<?= (int) $buku['id'] ?>">

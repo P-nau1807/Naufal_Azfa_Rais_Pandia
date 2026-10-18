@@ -16,8 +16,15 @@ class BukuController
 
     public function store(): void
     {
-        $data = $this->validateInput($_POST);
-        $this->model->insert($data);
+        $data = $this->validateInput($_POST, 'index.php?page=buku&action=create');
+
+        try {
+            $this->model->insert($data);
+            $this->flash('sukses', 'Buku berhasil ditambahkan.');
+        } catch (PDOException $e) {
+            $this->flash('gagal', $this->pesanDatabase($e));
+        }
+
         header('Location: index.php?page=buku');
         exit;
     }
@@ -38,8 +45,15 @@ class BukuController
     public function update(): void
     {
         $id = (int) ($_POST['id'] ?? 0);
-        $data = $this->validateInput($_POST);
-        $this->model->update($id, $data);
+        $data = $this->validateInput($_POST, 'index.php?page=buku&action=edit&id=' . $id);
+
+        try {
+            $this->model->update($id, $data);
+            $this->flash('sukses', 'Data buku berhasil diperbarui.');
+        } catch (PDOException $e) {
+            $this->flash('gagal', $this->pesanDatabase($e));
+        }
+
         header('Location: index.php?page=buku');
         exit;
     }
@@ -47,12 +61,19 @@ class BukuController
     public function delete(): void
     {
         $id = (int) ($_POST['id'] ?? 0);
-        $this->model->delete($id);
+
+        try {
+            $this->model->delete($id);
+            $this->flash('sukses', 'Buku berhasil dihapus.');
+        } catch (PDOException $e) {
+            $this->flash('gagal', 'Gagal menghapus buku.');
+        }
+
         header('Location: index.php?page=buku');
         exit;
     }
 
-    private function validateInput(array $input): array
+    private function validateInput(array $input, string $kembali): array
     {
         $data = [
             'isbn'         => trim($input['isbn'] ?? ''),
@@ -65,15 +86,32 @@ class BukuController
 
         foreach ($data as $nilai) {
             if ($nilai === '') {
-                exit('Semua field wajib diisi.');
+                $this->flash('gagal', 'Semua field wajib diisi.');
+                header('Location: ' . $kembali);
+                exit;
             }
         }
 
         if (!ctype_digit($data['tahun_terbit']) || !ctype_digit($data['stok'])) {
-            exit('Tahun terbit dan stok harus berupa angka.');
+            $this->flash('gagal', 'Tahun terbit dan stok harus berupa angka.');
+            header('Location: ' . $kembali);
+            exit;
         }
 
         return $data;
+    }
+
+    private function flash(string $tipe, string $teks): void
+    {
+        $_SESSION['pesan'] = ['tipe' => $tipe, 'teks' => $teks];
+    }
+
+    private function pesanDatabase(PDOException $e): string
+    {
+        if ($e->getCode() === '23000') {
+            return 'ISBN sudah terdaftar. Gunakan ISBN yang berbeda.';
+        }
+        return 'Terjadi kesalahan pada database.';
     }
 }
 ?>

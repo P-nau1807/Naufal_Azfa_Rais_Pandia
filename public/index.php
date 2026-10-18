@@ -1,4 +1,7 @@
 <?php
+session_start();
+require __DIR__ . '/../config/database.php';
+require __DIR__ . '/../config/database.php';
 require __DIR__ . '/../config/database.php';
 require __DIR__ . '/../app/models/Buku.php';
 require __DIR__ . '/../app/controllers/BukuController.php';
